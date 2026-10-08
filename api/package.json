@@ -1,8 +1,0 @@
-{
-  "name": "fitchat",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "@octokit/rest": "^19.0.0"
-  }
-}
