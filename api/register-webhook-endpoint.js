@@ -3,6 +3,11 @@ export default async function handler(req, res) {
 
   const clientId = process.env.STRAVA_CLIENT_ID;
   const clientSecret = process.env.STRAVA_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    return res.status(400).json({ error: 'Missing client credentials' });
+  }
+
   const verifyToken = 'my_verify_token_123';
   const callbackUrl = 'https://fitchat-one.vercel.app/api/strava-webhook';
 
@@ -35,6 +40,7 @@ export default async function handler(req, res) {
     });
 
     apiReq.on('error', (e) => {
+      console.error('Error:', e);
       resolve(res.status(500).json({ error: e.message }));
     });
 
