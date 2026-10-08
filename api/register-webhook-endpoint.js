@@ -1,11 +1,11 @@
-export default async function handler(req, res) {
-  const https = require('https');
+import https from 'https';
 
+export default async function handler(req, res) {
   const clientId = process.env.STRAVA_CLIENT_ID;
   const clientSecret = process.env.STRAVA_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    return res.status(400).json({ error: 'Missing client credentials' });
+    return res.status(400).json({ error: 'Missing client credentials', clientId: !!clientId, clientSecret: !!clientSecret });
   }
 
   const verifyToken = 'my_verify_token_123';
@@ -35,12 +35,13 @@ export default async function handler(req, res) {
         data += chunk;
       });
       apiRes.on('end', () => {
-        resolve(res.status(200).json({ success: true, response: data }));
+        console.log('Strava response:', data);
+        resolve(res.status(200).json({ success: true, response: JSON.parse(data) }));
       });
     });
 
     apiReq.on('error', (e) => {
-      console.error('Error:', e);
+      console.error('Request error:', e.message);
       resolve(res.status(500).json({ error: e.message }));
     });
 
